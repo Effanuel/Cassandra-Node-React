@@ -9,6 +9,8 @@ import Router from "./routes/route";
 import morgan from "morgan";
 import { logger } from "./util/logger";
 
+import cassandra from "cassandra-driver";
+
 const port = process.env.PORT || 3001;
 const app: express.Application = express();
 
@@ -36,6 +38,29 @@ app.use("/api", Router);
 // ============LOGGING============
 const morganFormat = process.env.NODE_ENV !== "production" ? "dev" : "combined";
 
+export const client = new cassandra.Client({
+  contactPoints: ["127.0.0.1"],
+  localDataCenter: "datacenter1",
+  keyspace: "transactions"
+});
+
+client.once("open", () => console.log("Connected to the database."));
+client.on("error", console.error.bind(console, "Cassandra connection error:"));
+
+// USE KEYSPACE
+async () => {
+  const query = `USE KEYSPACE transactions`;
+  try {
+    const result = await client.execute(query);
+  } catch (e) {
+    console.log("Use keyspace error");
+  }
+};
+
+//
+//
+//
+//
 app.use(
   morgan(morganFormat, {
     skip: function(req, res) {

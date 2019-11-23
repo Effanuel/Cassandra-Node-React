@@ -1,0 +1,96 @@
+:root {
+  --accentColor: #00ca45;
+  --primaryColor: #323e4d;
+  --secondaryColor: #253034;
+}
+
+.container {
+  margin: 0px;
+  margin-bottom: 5px;
+  height: 50px;
+
+  width: 1000px;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--accentColor);
+  background-color: var(--secondaryColor);
+}
+
+.container:hover {
+  background-color: var(--accentColor);
+  transition: 0.1s;
+}
+
+.Button {
+  border-radius: 0px;
+  padding: 0px;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  /* width: 80%; */
+  flex: 1;
+  /* background-color: red; */
+}
+
+.name-login-container {
+  display: inline-block;
+  vertical-align: middle;
+  flex: 3;
+  /* background-color: green; */
+}
+
+.account-container {
+  margin: 0px;
+  margin-bottom: 5px;
+  height: 35px;
+
+  width: 750px;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--accentColor);
+  background-color: var(--secondaryColor);
+}
+
+.account-container:hover {
+  background-color: var(--accentColor);
+  transition: 0.1s;
+}
+
+.account-span-container {
+  display: inline-block;
+  vertical-align: middle;
+  flex: 2;
+  color: var(--accentColor);
+}
+/* ================================ */
+.user_number-style {
+  color: white;
+  text-shadow: 2px 2px black;
+  font-weight: bold;
+}
+.user_id-style {
+  color: red;
+  text-shadow: 2px 2px black;
+  font-weight: bold;
+}
+
+.name-style {
+  color: lightblue;
+  text-shadow: 2px 2px black;
+  font-weight: bold;
+}
+
+.age-style {
+  color: pink;
+  text-shadow: 2px 2px black;
+  font-weight: bold;
+}
+
+.span-style {
+  color: grey;
+}
