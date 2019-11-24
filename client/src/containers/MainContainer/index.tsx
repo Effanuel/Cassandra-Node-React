@@ -1,11 +1,17 @@
 import * as React from "react";
 //REDUX
 import { connect } from "react-redux";
-import { getUsers, getAccounts } from "../../redux/actions/databaseActions";
+import {
+  getUsers,
+  getAccounts,
+  removeAccounts
+} from "../../redux/actions/databaseActions";
+import { modalOpen } from "../../redux/actions/modalActions";
 //COMPONENTS
 import { Card, SpinnerComponent } from "../../components";
+import { AddModal, AddCardModal } from "../";
 
-const handleChange = Symbol();
+const handleAddCard = Symbol();
 const handleAddData = Symbol();
 const handleRemoveData = Symbol();
 const handleUpdateData = Symbol();
@@ -18,12 +24,28 @@ class MainContainer extends React.Component<any, any> {
 
   [handleAddData] = (): void => {};
   [handleRemoveData] = (e: any, value: string): void => {};
-  [handleUpdateData] = (e: any, name: string): void => {};
+  [handleUpdateData] = (e: any, user_id: string): void => {
+    const data = { showModal: "addModal", selectedUserId: user_id };
+    this.props.modalOpen(data);
+  };
 
-  [handleChange] = (e: any) => {};
+  [handleAddCard] = (e: any, account_id: any) => {
+    const data = { showModal: "addCardModal", selectedAccountId: account_id };
+    this.props.modalOpen(data);
+  };
 
   [handleGetAccounts] = (e: any, user_id: any): any => {
-    this.props.getAccounts(user_id);
+    const { accounts } = this.props;
+    if (!this.checkEmpty(accounts)) {
+      const arr = accounts.map((el: any, i: any) => {
+        return el.user_id === user_id;
+      });
+      arr.includes(true)
+        ? this.props.removeAccounts(user_id)
+        : this.props.getAccounts(user_id);
+    } else {
+      this.props.getAccounts(user_id);
+    }
   };
 
   checkEmpty = (array: any): boolean => {
@@ -32,9 +54,10 @@ class MainContainer extends React.Component<any, any> {
   };
 
   render() {
-    const { loading, users, accounts } = this.props;
+    const { loading, users, accounts, error } = this.props;
     return (
       <>
+        <div style={{ color: "red" }}>{error}</div>
         {loading ? (
           <SpinnerComponent />
         ) : this.checkEmpty(users) ? (
@@ -51,9 +74,12 @@ class MainContainer extends React.Component<any, any> {
               onClickRemove={this[handleRemoveData]}
               onClickUpdate={this[handleUpdateData]}
               onGetAccounts={this[handleGetAccounts]}
+              onClickAddCard={this[handleAddCard]}
             />
           ))
         )}
+        <AddModal />
+        <AddCardModal />
       </>
     );
   }
@@ -62,9 +88,13 @@ class MainContainer extends React.Component<any, any> {
 const mapStateToProps = (state: any) => ({
   users: state.database.data,
   accounts: state.database.accounts,
-  loading: state.database.loading
+  loading: state.database.loading,
+  error: state.database.error
 });
 
-export default connect(mapStateToProps, { getUsers, getAccounts })(
-  MainContainer
-);
+export default connect(mapStateToProps, {
+  getUsers,
+  getAccounts,
+  removeAccounts,
+  modalOpen
+})(MainContainer);

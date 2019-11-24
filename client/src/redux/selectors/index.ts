@@ -6,6 +6,7 @@ const getUsers = (state: AppState) => state.database.data;
 const getAccounts = (state: AppState) => state.database.accounts;
 const getCards = (state: AppState) => state.database.cards;
 const getLoading = (state: AppState) => state.database.loading;
+const getShowModal = (state: AppState) => state.modal.showModal;
 
 export const databaseUsersSelector = createSelector(
   [getUsers],
@@ -23,4 +24,9 @@ export const databaseCardsSelector = createSelector(
 export const databaseAccountsSelector = createSelector(
   [getAccounts],
   (accounts: any) => accounts
+);
+
+export const modalShowModalSelector = createSelector(
+  [getShowModal],
+  (showModal: any) => showModal
 );

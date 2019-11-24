@@ -1,7 +1,7 @@
 import React from "react";
 
 import { connect } from "react-redux";
-import { getCards } from "../../redux/actions/databaseActions";
+import { getCards, removeCards } from "../../redux/actions/databaseActions";
 import {
   databaseAccountsSelector,
   databaseLoadingSelector,
@@ -26,13 +26,22 @@ const handleGetCards = Symbol();
 
 class Card extends React.Component<any, any> {
   checkEmpty = (array: any): boolean => {
-    console.log(array, "arr");
     return array && array.constructor === Array && array.length === 0;
   };
 
   [handleGetCards] = (e: any) => {
-    console.log(e.target, "HANDLE ID");
-    this.props.getCards(e.target.id);
+    const { cards } = this.props;
+    const { id } = e.target;
+    if (!this.checkEmpty(cards)) {
+      const arr = cards.map((el: any, i: any) => {
+        return el.account_id == id;
+      });
+      console.log(arr.includes(true), "cards arr");
+      arr.includes(true) ? this.props.removeCards(id) : this.props.getCards(id);
+      console.log(this.props.cards);
+    } else {
+      this.props.getCards(id);
+    }
   };
 
   render() {
@@ -45,6 +54,7 @@ class Card extends React.Component<any, any> {
       onClickUpdate,
       onClickRemove,
       onGetAccounts,
+      onClickAddCard,
       loading,
       cards
     } = this.props;
@@ -74,14 +84,11 @@ class Card extends React.Component<any, any> {
             {/* </span> */}
           </span>
           <div className="button-container">
-            <Button variant="info" onClick={(e: any) => onClickUpdate(e, name)}>
-              /
-            </Button>
             <Button
-              variant="danger"
-              onClick={(e: any) => onClickRemove(e, name)}
+              variant="info"
+              onClick={(e: any) => onClickUpdate(e, user_id)}
             >
-              X
+              +
             </Button>
           </div>
         </div>
@@ -100,17 +107,31 @@ class Card extends React.Component<any, any> {
                     <span className="span-style">Account ID: </span>
                     {acc.account_id}
                   </span>
+                  <div className="button-container">
+                    <Button
+                      variant="info"
+                      onClick={(e: any) => onClickAddCard(e, acc.account_id)}
+                    >
+                      +
+                    </Button>
+                  </div>
                 </div>
 
                 {loading ? (
                   <SpinnerComponent />
                 ) : !this.checkEmpty(cards) ? (
                   cards.map((item: any, j: any) =>
-                    item.account_id == acc.account_id ? (
+                    item.account_id === acc.account_id ? (
                       <div className="cards-container" key={item.card_id}>
                         <span className="secondary-container accent">
-                          <span className="span-style">Balance: </span>
-                          {item.balance}
+                          <span>
+                            <span className="span-style">Balance: </span>
+                            {item.balance}
+                          </span>
+                          <span className="lblue">
+                            <span className="span-style"> Card ID: </span>
+                            {item.card_id}
+                          </span>
                         </span>
                       </div>
                     ) : null
@@ -131,4 +152,4 @@ const mapStateToProps = (state: any) => ({
   cards: databaseCardsSelector(state)
 });
 
-export default connect(mapStateToProps, { getCards })(Card) as any;
+export default connect(mapStateToProps, { getCards, removeCards })(Card) as any;

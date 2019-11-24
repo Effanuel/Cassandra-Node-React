@@ -5,6 +5,7 @@ export type Thunk = ThunkAction<void, any, any, Action<string>>;
 
 export interface AppState {
   database: DatabaseState;
+  modal: ModalState;
 }
 
 export interface DatabaseState {
@@ -13,5 +14,10 @@ export interface DatabaseState {
   cards: any;
   loading: boolean;
   error: string;
-  selectedName: any;
+}
+
+export interface ModalState {
+  showModal: string | null | undefined;
+  selectedUserId: any;
+  selectedAccountId: any;
 }

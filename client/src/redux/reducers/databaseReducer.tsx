@@ -4,7 +4,9 @@ import {
   GET_USERS_SUCCESS,
   GET_ACCOUNTS_SUCCESS,
   GET_CARDS_SUCCESS,
-  SELECT_NAME
+  REMOVE_ACCOUNTS_SUCCESS,
+  REMOVE_CARDS_SUCCESS,
+  ADD_DATA_SUCCESS
 } from "../actions/actionTypes";
 
 import { Actions } from "../actions/databaseActions";
@@ -15,12 +17,7 @@ const initialState = {
   accounts: [],
   cards: [],
   loading: false,
-  error: "",
-  selectedName: {
-    name: "",
-    login: "",
-    password: ""
-  }
+  error: ""
 };
 
 export default (state: DatabaseState = initialState, action: Actions): any => {
@@ -47,8 +44,33 @@ export default (state: DatabaseState = initialState, action: Actions): any => {
         error: ""
       };
 
+    case REMOVE_ACCOUNTS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        accounts: [
+          ...state.accounts.filter(
+            (item: any) => item.user_id !== action.payload
+          )
+        ],
+        error: ""
+      };
+    case REMOVE_CARDS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        cards: [
+          ...state.cards.filter(
+            (item: any) => item.account_id != action.payload
+          )
+        ],
+        error: ""
+      };
+
     case DATA_LOADING:
       return { ...state, loading: true, error: "" };
+    case ADD_DATA_SUCCESS:
+      return { ...state, loading: false, error: action.payload };
     case FETCH_DATA_ERROR:
       return { ...state, loading: false, error: action.payload };
     // case ADD_DATA_ERROR:
