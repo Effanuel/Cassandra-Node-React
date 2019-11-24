@@ -49,7 +49,6 @@ class MainContainer extends React.Component<any, any> {
   };
 
   checkEmpty = (array: any): boolean => {
-    console.log(array);
     return array && array.constructor === Array && array.length === 0;
   };
 

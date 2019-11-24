@@ -36,9 +36,7 @@ class Card extends React.Component<any, any> {
       const arr = cards.map((el: any, i: any) => {
         return el.account_id == id;
       });
-      console.log(arr.includes(true), "cards arr");
       arr.includes(true) ? this.props.removeCards(id) : this.props.getCards(id);
-      console.log(this.props.cards);
     } else {
       this.props.getCards(id);
     }

@@ -87,7 +87,6 @@ export const getCards = (payload: any): Thunk => async dispatch => {
       }
     });
     const { data } = response;
-    console.log("CARDSGET", data);
     dispatch(getCardsSuccess(data));
   } catch (err) {
     console.log("FETCHDATAERROR", err);
@@ -108,7 +107,6 @@ export const addAccount = ({
       }
     });
     const { data } = response;
-    console.log(data, "REDUX DATA");
     dispatch(success(data));
     dispatch(modalClose());
   } catch (err) {
@@ -132,7 +130,6 @@ export const addCard = ({
       }
     });
     const { data } = response;
-    console.log(data, "REDUX DATA");
     dispatch(success(data));
     dispatch(modalClose());
   } catch (err) {
@@ -183,10 +180,9 @@ function dataLoading(payload?: any): any {
 }
 
 function success(payload?: any): any {
-  console.log(!payload.success ? "Account already exists" : "");
   return {
     type: constants.ADD_DATA_SUCCESS,
-    payload: !payload.success ? "Account already exists" : ""
+    payload: !payload.success ? "Already exists" : ""
   };
 }
 
