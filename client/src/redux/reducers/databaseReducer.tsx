@@ -23,7 +23,7 @@ const initialState = {
   }
 };
 
-export default (state: any = initialState, action: Actions): any => {
+export default (state: DatabaseState = initialState, action: Actions): any => {
   switch (action.type) {
     case GET_USERS_SUCCESS:
       return {

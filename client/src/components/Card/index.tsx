@@ -2,6 +2,11 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { getCards } from "../../redux/actions/databaseActions";
+import {
+  databaseAccountsSelector,
+  databaseLoadingSelector,
+  databaseCardsSelector
+} from "../../redux/selectors";
 
 import { Button } from "react-bootstrap";
 import { SpinnerComponent } from "../SpinnerComponent";
@@ -47,7 +52,7 @@ class Card extends React.Component<any, any> {
       <>
         <div className="container">
           <span
-            className="name-login-container"
+            className="secondary-container"
             onClick={(e: any) => onGetAccounts(e, user_id)}
           >
             <span className="span-style">
@@ -85,14 +90,14 @@ class Card extends React.Component<any, any> {
         ) : !this.checkEmpty(account_ids) ? (
           account_ids.map((acc: any, i: any) =>
             user_id === acc.user_id ? (
-              <div key={i}>
+              <React.Fragment key={i}>
                 <div className="account-container">
                   <span
                     id={acc.account_id}
-                    className="account-span-container"
+                    className="secondary-container red"
                     onClick={this[handleGetCards]}
                   >
-                    <span className="span-style">Account ID:</span>
+                    <span className="span-style">Account ID: </span>
                     {acc.account_id}
                   </span>
                 </div>
@@ -102,8 +107,8 @@ class Card extends React.Component<any, any> {
                 ) : !this.checkEmpty(cards) ? (
                   cards.map((item: any, j: any) =>
                     item.account_id == acc.account_id ? (
-                      <div className="account-container" key={item.card_id}>
-                        <span className="account-span-container">
+                      <div className="cards-container" key={item.card_id}>
+                        <span className="secondary-container accent">
                           <span className="span-style">Balance: </span>
                           {item.balance}
                         </span>
@@ -111,32 +116,19 @@ class Card extends React.Component<any, any> {
                     ) : null
                   )
                 ) : null}
-              </div>
+              </React.Fragment>
             ) : null
           )
         ) : null}
-
-        {/* {account_ids
-          ? account_ids.map((el: any, i: any) => (
-              <div className="container">
-                <span
-                  className="name-login-container"
-                  onClick={(e: any) => onGetAccounts(e, user_id)}
-                >
-                  abc
-                </span>
-              </div>
-            ))
-          : null} */}
       </>
     );
   }
 }
 
 const mapStateToProps = (state: any) => ({
-  accounts: state.database.accounts,
-  loading: state.database.loading,
-  cards: state.database.cards
+  accounts: databaseAccountsSelector(state),
+  loading: databaseLoadingSelector(state),
+  cards: databaseCardsSelector(state)
 });
 
 export default connect(mapStateToProps, { getCards })(Card) as any;

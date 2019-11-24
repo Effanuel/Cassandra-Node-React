@@ -5,10 +5,16 @@ import { client } from "../app";
 const Router = express.Router();
 
 Router.get("/getUsers", async (req, res) => {
-  const query = `SELECT * FROM users_users_id`;
   try {
-    const result = await client.execute(query);
-    const data = result.rows;
+    const query1 = `SELECT * FROM users_users_id WHERE user_id=1`;
+    const result1 = await client.execute(query1);
+    const data1 = result1.rows;
+
+    const query2 = `SELECT * FROM users_users_number WHERE user_number='U666'`;
+    const result2 = await client.execute(query2);
+    const data2 = result2.rows;
+
+    const data = [...data1, ...data2];
     return res.json({ success: true, data: data });
   } catch (e) {
     return res.json({ success: false, error: e });
@@ -137,12 +143,12 @@ export default Router;
 // //==============QUERIES=================
 // // Saskaitos pagal saskaitos numeri
 // SELECT * FROM accounts_account_id WHERE account_id=11;
-// // Saskaitos pagal klienta
-// SELECT * from accounts_user_id WHERE user_id=1;
-// // Klientai pagal ID
-// SELECT * FROM users_users_id WHERE user_id=1;
-// // Klientai pagal koda
-// SELECT * FROM users_users_number WHERE user_number='U666';
+//+ // Saskaitos pagal klienta
+//+ SELECT * from accounts_user_id WHERE user_id=1;
+//+ // Klientai pagal ID
+//+ SELECT * FROM users_users_id WHERE user_id=1;
+//+ // Klientai pagal koda
+//+ SELECT * FROM users_users_number WHERE user_number='U666';
 // // Kredito korteles pagal ID
 // SELECT * FROM credit_cards WHERE card_id=4;
 // // Saskaitos numeris pagal korteles ID

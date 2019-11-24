@@ -1,5 +1,5 @@
 :root {
-  --accentColor: #00ca45;
+  --accentColor: lightgrey;
   --primaryColor: #323e4d;
   --secondaryColor: #253034;
 }
@@ -17,7 +17,7 @@
 }
 
 .container:hover {
-  background-color: var(--accentColor);
+  background-color: lightgrey;
   transition: 0.1s;
 }
 
@@ -37,7 +37,7 @@
   /* background-color: red; */
 }
 
-.name-login-container {
+.secondary-container {
   display: inline-block;
   vertical-align: middle;
   flex: 3;
@@ -48,7 +48,8 @@
   margin: 0px;
   margin-bottom: 5px;
   height: 35px;
-
+  padding-left: 15px;
+  margin-left: 15px;
   width: 750px;
   display: flex;
   align-items: center;
@@ -61,11 +62,29 @@
   transition: 0.1s;
 }
 
-.account-span-container {
-  display: inline-block;
-  vertical-align: middle;
-  flex: 2;
-  color: var(--accentColor);
+.cards-container {
+  margin: 0px;
+  margin-bottom: 5px;
+  height: 25px;
+  padding-left: 15px;
+  margin-left: 30px;
+  width: 750px;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--accentColor);
+  background-color: var(--secondaryColor);
+}
+
+.cards-container:hover {
+  background-color: var(--accentColor);
+  transition: 0.1s;
+}
+
+.accent {
+  color: green;
+}
+.red {
+  color: red;
 }
 /* ================================ */
 .user_number-style {
@@ -93,4 +112,5 @@
 
 .span-style {
   color: grey;
+  text-shadow: 1px 1px black;
 }
