@@ -1,5 +1,4 @@
 import React from "react";
-
 import { Button, Modal, Form } from "react-bootstrap";
 
 const ModalComponent = ({
@@ -15,7 +14,7 @@ const ModalComponent = ({
   label_id2,
   onInputChange,
   loadingComponent,
-  disabled
+  disabled,
 }: any) => {
   return (
     <>

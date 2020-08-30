@@ -1,5 +1,4 @@
 import { createSelector } from "reselect";
-
 import { AppState } from "../models/state";
 
 const getUsers = (state: AppState) => state.database.data;

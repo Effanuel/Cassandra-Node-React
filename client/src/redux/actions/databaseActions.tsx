@@ -1,42 +1,41 @@
 import * as constants from "./actionTypes";
 import axios from "axios";
-
 import { Thunk } from "../models/state";
 import { modalClose } from "./modalActions";
 
 interface DataLoading {
-  type: constants.DATA_LOADING;
+  type: typeof constants.DATA_LOADING;
 }
 interface GetUsersSuccess {
-  type: constants.GET_USERS_SUCCESS;
+  type: typeof constants.GET_USERS_SUCCESS;
   payload: any;
 }
 interface GetAccountsSuccess {
-  type: constants.GET_ACCOUNTS_SUCCESS;
+  type: typeof constants.GET_ACCOUNTS_SUCCESS;
   payload: any;
 }
 interface GetCardsSuccess {
-  type: constants.GET_CARDS_SUCCESS;
+  type: typeof constants.GET_CARDS_SUCCESS;
   payload: any;
 }
 
 interface FetchDataError {
-  type: constants.FETCH_DATA_ERROR;
+  type: typeof constants.FETCH_DATA_ERROR;
   payload: any;
 }
 
 interface RemoveAccounts {
-  type: constants.REMOVE_ACCOUNTS_SUCCESS;
+  type: typeof constants.REMOVE_ACCOUNTS_SUCCESS;
   payload: any;
 }
 
 interface RemoveCards {
-  type: constants.REMOVE_CARDS_SUCCESS;
+  type: typeof constants.REMOVE_CARDS_SUCCESS;
   payload: any;
 }
 
 interface Success {
-  type: constants.ADD_DATA_SUCCESS;
+  type: typeof constants.ADD_DATA_SUCCESS;
   payload: any;
 }
 
@@ -50,7 +49,7 @@ export type Actions =
   | RemoveCards
   | Success;
 
-export const getUsers = (payload?: any): Thunk => async dispatch => {
+export const getUsers = (payload?: any): Thunk => async (dispatch) => {
   try {
     dispatch(dataLoading());
     const response = await axios.get("/api/getUsers");
@@ -62,13 +61,11 @@ export const getUsers = (payload?: any): Thunk => async dispatch => {
   }
 };
 
-export const getAccounts = (payload: any): Thunk => async dispatch => {
+export const getAccounts = (payload: any): Thunk => async (dispatch) => {
   try {
     dispatch(dataLoading());
     const response = await axios.post("/api/getAccounts", {
-      data: {
-        user_id: payload
-      }
+      data: { user_id: payload },
     });
     const { data } = response;
     dispatch(getAccountsSuccess(data));
@@ -78,13 +75,11 @@ export const getAccounts = (payload: any): Thunk => async dispatch => {
   }
 };
 
-export const getCards = (payload: any): Thunk => async dispatch => {
+export const getCards = (payload: any): Thunk => async (dispatch) => {
   try {
     dispatch(dataLoading());
     const response = await axios.post("/api/getCards", {
-      data: {
-        account_id: payload
-      }
+      data: { account_id: payload },
     });
     const { data } = response;
     dispatch(getCardsSuccess(data));
@@ -96,15 +91,12 @@ export const getCards = (payload: any): Thunk => async dispatch => {
 
 export const addAccount = ({
   account_id,
-  selectedUserId
-}: any): Thunk => async dispatch => {
+  selectedUserId,
+}: any): Thunk => async (dispatch) => {
   try {
     dispatch(dataLoading());
     const response = await axios.post("/api/addAccount", {
-      data: {
-        account_id,
-        selectedUserId
-      }
+      data: { account_id, selectedUserId },
     });
     const { data } = response;
     dispatch(success(data));
@@ -115,19 +107,13 @@ export const addAccount = ({
   }
 };
 
-export const addCard = ({
-  card_id,
-  account_id,
-  balance
-}: any): Thunk => async dispatch => {
+export const addCard = ({ card_id, account_id, balance }: any): Thunk => async (
+  dispatch
+) => {
   try {
     dispatch(dataLoading());
     const response = await axios.post("/api/addCard", {
-      data: {
-        card_id,
-        account_id,
-        balance
-      }
+      data: { card_id, account_id, balance },
     });
     const { data } = response;
     dispatch(success(data));
@@ -138,34 +124,17 @@ export const addCard = ({
   }
 };
 
-// export const removeAccounts = (payload: any): Thunk => async dispatch => {
-//   try {
-//     dispatch(dataLoading());
-//   } catch (err) {
-//     dispatch(fetchDataError(err));
-//   }
-// };
+export const removeAccounts = (payload: any) => ({
+  type: constants.REMOVE_ACCOUNTS_SUCCESS,
+  payload,
+});
 
-export function removeAccounts(payload: any): any {
-  return {
-    type: constants.REMOVE_ACCOUNTS_SUCCESS,
-    payload: payload
-  };
-}
+export const removeCards = (payload: any) => ({
+  type: constants.REMOVE_CARDS_SUCCESS,
+  payload,
+});
 
-export function removeCards(payload: any): any {
-  console.log(payload);
-  return {
-    type: constants.REMOVE_CARDS_SUCCESS,
-    payload: payload
-  };
-}
-
-export const updateData = ({
-  name,
-  login,
-  password
-}: any): Thunk => async dispatch => {
+export const updateData = (): Thunk => async (dispatch) => {
   try {
     dispatch(dataLoading());
   } catch (err) {
@@ -173,50 +142,36 @@ export const updateData = ({
   }
 };
 
-function dataLoading(payload?: any): any {
-  return {
-    type: constants.DATA_LOADING
-  };
-}
+const dataLoading = (payload?: any) => ({
+  type: constants.DATA_LOADING,
+});
 
-function success(payload?: any): any {
-  return {
-    type: constants.ADD_DATA_SUCCESS,
-    payload: !payload.success ? "Already exists" : ""
-  };
-}
+const success = (payload?: any) => ({
+  type: constants.ADD_DATA_SUCCESS,
+  payload: !payload.success ? "Already exists" : "",
+});
 
-function getUsersSuccess(payload: any): any {
-  return {
-    type: constants.GET_USERS_SUCCESS,
-    payload: payload.data
-  };
-}
+const getUsersSuccess = (payload: any) => ({
+  type: constants.GET_USERS_SUCCESS,
+  payload: payload.data,
+});
 
-function getAccountsSuccess(payload: any): any {
-  return {
-    type: constants.GET_ACCOUNTS_SUCCESS,
-    payload: payload.data
-  };
-}
+const getAccountsSuccess = (payload: any) => ({
+  type: constants.GET_ACCOUNTS_SUCCESS,
+  payload: payload.data,
+});
 
-function getCardsSuccess(payload: any): any {
-  return {
-    type: constants.GET_CARDS_SUCCESS,
-    payload: payload.data
-  };
-}
+const getCardsSuccess = (payload: any) => ({
+  type: constants.GET_CARDS_SUCCESS,
+  payload: payload.data,
+});
 
-function removeDataSuccess(payload?: any): any {
-  return {
-    type: constants.ADD_DATA_SUCCESS,
-    payload: payload
-  };
-}
+const removeDataSuccess = (payload?: any) => ({
+  type: constants.ADD_DATA_SUCCESS,
+  payload: payload,
+});
 
-function fetchDataError(payload: any): any {
-  return {
-    type: constants.FETCH_DATA_ERROR,
-    payload: payload.error
-  };
-}
+const fetchDataError = (payload: any) => ({
+  type: constants.FETCH_DATA_ERROR,
+  payload: payload.error,
+});

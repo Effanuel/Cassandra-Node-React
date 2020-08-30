@@ -5,7 +5,7 @@ import { getCards, removeCards } from "../../redux/actions/databaseActions";
 import {
   databaseAccountsSelector,
   databaseLoadingSelector,
-  databaseCardsSelector
+  databaseCardsSelector,
 } from "../../redux/selectors";
 
 import { Button } from "react-bootstrap";
@@ -54,7 +54,7 @@ class Card extends React.Component<any, any> {
       onGetAccounts,
       onClickAddCard,
       loading,
-      cards
+      cards,
     } = this.props;
     return (
       <>
@@ -147,7 +147,7 @@ class Card extends React.Component<any, any> {
 const mapStateToProps = (state: any) => ({
   accounts: databaseAccountsSelector(state),
   loading: databaseLoadingSelector(state),
-  cards: databaseCardsSelector(state)
+  cards: databaseCardsSelector(state),
 });
 
 export default connect(mapStateToProps, { getCards, removeCards })(Card) as any;

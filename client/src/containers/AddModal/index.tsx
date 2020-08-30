@@ -1,73 +1,49 @@
 import React from "react";
-// REDUX
-import { connect } from "react-redux";
+import { shallowEqual, useSelector, useDispatch } from "react-redux";
 import { modalClose } from "../../redux/actions/modalActions";
 import { addAccount } from "../../redux/actions/databaseActions";
-import {
-  modalShowModalSelector,
-  databaseLoadingSelector
-} from "../../redux/selectors";
-// COMPONENTS
 import { ModalComponent, SpinnerComponent } from "../../components";
+import { AppState } from "../../redux/models/state";
 
-const initialState = Object.freeze({ account_id: "" });
+export default React.memo(() => {
+  const dispatch = useDispatch();
+  const [accountId, setAccountId] = React.useState("");
 
-const handleSave = Symbol();
-const handleClose = Symbol();
+  const { showModal, loading, selectedUserId } = useSelector(
+    (state: AppState) => ({
+      showModal: state.modal.showModal,
+      loading: state.database.loading,
+      selectedUserId: state.modal.selectedUserId,
+    }),
+    shallowEqual
+  );
 
-const handleChange = Symbol();
+  const handleSave = React.useCallback(() => {
+    const account_id = parseInt(accountId);
+    dispatch(addAccount({ account_id, selectedUserId }));
+  }, [dispatch, accountId, selectedUserId]);
 
-class AddModal extends React.Component<any, any> {
-  readonly state: any = initialState;
+  const handleClose = React.useCallback(() => {
+    dispatch(modalClose());
+    setAccountId("");
+  }, [dispatch]);
 
-  [handleSave] = (): void => {
-    const account_id = parseInt(this.state.account_id);
-    const { selectedUserId } = this.props;
-    const data = { account_id, selectedUserId };
-    this.props.addAccount(data);
-  };
+  const handleChange = React.useCallback(({ target: { value } }) => {
+    setAccountId(value);
+  }, []);
 
-  [handleClose] = (): void => {
-    this.props.modalClose();
-    this.setState(initialState);
-  };
-  [handleChange] = (event: any): any => {
-    const { id, value } = event.target;
-    this.setState({
-      [id]: value
-    } as Pick<any, keyof any>);
-  };
-
-  render() {
-    const { showModal, loading, selectedUserId, error } = this.props;
-    const { account_id } = this.state;
-    return (
-      <>
-        <ModalComponent
-          title={`Add a new account for user: ${selectedUserId}`}
-          show={showModal === "addModal" || false}
-          onSave={this[handleSave]}
-          onClose={this[handleClose]}
-          input_id="account_id"
-          label_id1="Account ID"
-          p_1="account id"
-          onInputChange={this[handleChange]}
-          loadingComponent={loading ? <SpinnerComponent /> : null}
-          disabled={!account_id}
-        />
-      </>
-    );
-  }
-}
-
-const mapStateToProps = (state: any) => ({
-  showModal: modalShowModalSelector(state),
-  loading: databaseLoadingSelector(state),
-  selectedUserId: state.modal.selectedUserId
+  return (
+    <ModalComponent
+      title={`Add a new account for user: ${selectedUserId}`}
+      show={showModal === "addModal" || false}
+      onSave={handleSave}
+      onClose={handleClose}
+      input_id="account_id"
+      label_id1="Account ID"
+      p_1="account id"
+      onInputChange={handleChange}
+      loadingComponent={loading ? <SpinnerComponent /> : null}
+      disabled={accountId === ""}
+    />
+  );
 });
-
-export default connect(mapStateToProps, {
-  modalClose,
-  addAccount
-  // addData
-})(AddModal);

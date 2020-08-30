@@ -6,7 +6,7 @@ import {
   GET_CARDS_SUCCESS,
   REMOVE_ACCOUNTS_SUCCESS,
   REMOVE_CARDS_SUCCESS,
-  ADD_DATA_SUCCESS
+  ADD_DATA_SUCCESS,
 } from "../actions/actionTypes";
 
 import { Actions } from "../actions/databaseActions";
@@ -17,31 +17,26 @@ const initialState = {
   accounts: [],
   cards: [],
   loading: false,
-  error: ""
+  error: "",
 };
 
 export default (state: DatabaseState = initialState, action: Actions): any => {
   switch (action.type) {
     case GET_USERS_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        data: action.payload,
-        error: ""
-      };
+      return { ...state, loading: false, data: action.payload, error: "" };
     case GET_ACCOUNTS_SUCCESS:
       return {
         ...state,
         loading: false,
-        accounts: state.accounts.concat(action.payload),
-        error: ""
+        accounts: [...state.accounts, action.payload],
+        error: "",
       };
     case GET_CARDS_SUCCESS:
       return {
         ...state,
         loading: false,
-        cards: state.cards.concat(action.payload),
-        error: ""
+        cards: [...state.accounts, action.payload],
+        error: "",
       };
 
     case REMOVE_ACCOUNTS_SUCCESS:
@@ -51,9 +46,9 @@ export default (state: DatabaseState = initialState, action: Actions): any => {
         accounts: [
           ...state.accounts.filter(
             (item: any) => item.user_id !== action.payload
-          )
+          ),
         ],
-        error: ""
+        error: "",
       };
     case REMOVE_CARDS_SUCCESS:
       return {
@@ -61,10 +56,10 @@ export default (state: DatabaseState = initialState, action: Actions): any => {
         loading: false,
         cards: [
           ...state.cards.filter(
-            (item: any) => item.account_id != action.payload
-          )
+            (item: any) => item.account_id !== action.payload
+          ),
         ],
-        error: ""
+        error: "",
       };
 
     case DATA_LOADING:
@@ -73,8 +68,6 @@ export default (state: DatabaseState = initialState, action: Actions): any => {
       return { ...state, loading: false, error: action.payload };
     case FETCH_DATA_ERROR:
       return { ...state, loading: false, error: action.payload };
-    // case ADD_DATA_ERROR:
-    //   return { ...state, loading: false, error: action.payload };
     default:
       return state;
   }
